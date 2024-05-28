@@ -30,11 +30,10 @@ namespace Caching
             if (requestCount >= _maxRequests)
             {
                 context.Response.StatusCode = StatusCodes.Status429TooManyRequests;
-                await context.Response.WriteAsync("Too many requests. Please try again later.");
                 return;
             }
 
-            _cache.Set(_cacheKey, requestCount + 1);
+            _cache.Set(_cacheKey, requestCount + 1, _timeWindow);
 
             await _next(context);
         }
